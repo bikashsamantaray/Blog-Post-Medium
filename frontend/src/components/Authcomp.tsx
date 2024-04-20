@@ -3,6 +3,9 @@ import axios from "axios"
 import { ChangeEvent, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { BACKEND_URL } from "../config"
+import { Spinner } from "./Spinner"
+
+
 
 export const Auth = ({type}: {type:"signup" | "signin"}) => {
 
@@ -13,6 +16,7 @@ export const Auth = ({type}: {type:"signup" | "signin"}) => {
         password:"",
         name:""
     })
+    const [loading,setLoading] = useState(false)
 
     async function sendRequest() {
         try{
@@ -23,6 +27,10 @@ export const Auth = ({type}: {type:"signup" | "signin"}) => {
         }catch(e){
 
         }
+    }
+    function handleClick(){
+        setLoading(true);
+        
     }
 
     return <div className="h-screen flex justify-center flex-col">
@@ -61,9 +69,12 @@ export const Auth = ({type}: {type:"signup" | "signin"}) => {
                         }} />
                     </div>
                     <div>
-                    <button onClick={sendRequest} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 w-full
+                    <button onClick={() => {
+                        sendRequest(),
+                        handleClick()
+                    }} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 w-full
                      focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700
-                      dark:focus:ring-gray-700 dark:border-gray-700 mt-4">{type == "signup" ? "Sign up" : "Sign in"}</button>
+                      dark:focus:ring-gray-700 dark:border-gray-700 mt-4">{loading? <Spinner /> : type == "signup" ? "Sign up" : "Sign in"}</button>
                     </div>
 
             </div>
